@@ -1,0 +1,34 @@
+
+import java.io.*;
+import java.net.*;
+import java.util.*;
+
+public class EchoServer
+{
+  public static void main(String [] args) throws IOException
+  {
+    try (ServerSocket s = new ServerSocket(8189))
+    {
+      try (Socket incoming = s.accept())
+      {
+        InputStream inStream = incoming.getInputStream();
+        OutputStream outStream = incoming.getOutputStream();
+
+        try (Scanner in = new Scanner(inStream))
+        {
+          PrintWriter out = new PrintWriter(outStream, true);
+          System.out.println("hello, enter bye to exit");
+
+          boolean done = false;
+          while(!done && in.hasNextLine())
+          {
+            String line = in.nextLine();
+            System.out.println("echo: " + line);
+            if (line.trim().equals("bye")) done = true;
+
+          }
+        }
+      }
+    }
+  }
+}
